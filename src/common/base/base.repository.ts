@@ -91,7 +91,6 @@ export class BaseRepository<T extends MongoBaseSchema> {
         });
     }
 
-
     async findOne(filter: FilterQuery<SchemaDocument<T>>) {
         try {
             return this.model.findOne({

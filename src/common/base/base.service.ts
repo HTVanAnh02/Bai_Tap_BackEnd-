@@ -36,5 +36,4 @@ export class BaseService<
             throw error;
         }
     }
-    
 }

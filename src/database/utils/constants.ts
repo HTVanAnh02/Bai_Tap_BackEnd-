@@ -1,8 +1,12 @@
 export enum MongoCollection {
     USERS = 'users',
-    PRODUCT='prouducts'
+    PRODUCT = 'prouducts',
+}
+export enum CategoryCollection {
+    USERS = 'users',
+    CATEGORY = 'categorys',
 }
 export enum RoleCollection {
     USERS = 'User',
-    Admin='Admin'
+    Admin = 'Admin',
 }

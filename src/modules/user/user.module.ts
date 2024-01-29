@@ -6,13 +6,12 @@ import { UserRepository } from './user.repository';
 import { User, UserSchema } from '../../database/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
 
-
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
     controllers: [UserController],
-    providers: [UserService, UserRepository,JwtService],
+    providers: [UserService, UserRepository, JwtService],
     exports: [UserRepository],
 })
 export class UserModule {}

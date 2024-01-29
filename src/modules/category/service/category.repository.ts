@@ -1,34 +1,27 @@
-import { BaseRepository } from '../../common/base/base.repository';
 import {
-    Product,
-    ProductDocument,
-} from '../../database/schemas/product.schema';
+    Category,
+    CategoryDocument,
+} from '../../../database/schemas/category.schema';
 
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { GetProductListQuery } from './product.interface';
-import {
-    DEFAULT_FIRST_PAGE,
-    DEFAULT_LIMIT_FOR_PAGINATION,
-    DEFAULT_ORDER_BY,
-    DEFAULT_ORDER_DIRECTION,
-    OrderDirection,
-    softDeleteCondition,
-} from '../../common/constants';
-import { parseMongoProjection } from '../../common/helpers/commonFunctions';
-import { ProductAttributesForList } from './product.contant';
+import { GetCategoryListQuery } from './category.interface';
+import { CategoryAttributesForList } from './category.contant';
+import { BaseRepository } from '@/common/base/base.repository';
+import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION, OrderDirection,softDeleteCondition} from '@/common/constants';
+import { parseMongoProjection } from '@/common/helpers/commonFunctions';
 
 @Injectable()
-export class ProductRepository extends BaseRepository<Product> {
+export class CategoryRepository extends BaseRepository<Category> {
     constructor(
-        @InjectModel(Product.name)
-        private readonly productModel: Model<ProductDocument>,
+        @InjectModel(Category.name)
+        private readonly categoryModel: Model<CategoryDocument>,
     ) {
-        super(productModel);
+        super(categoryModel);
     }
 
-    async findAllAndCountProductByQuery(query: GetProductListQuery) {
+    async findAllAndCountCategoryByQuery(query: GetCategoryListQuery) {
         try {
             const {
                 keyword = '',
@@ -44,7 +37,7 @@ export class ProductRepository extends BaseRepository<Product> {
             // console.log(orderBy)
             // console.log(orderDirection)
             // console.log(name)
-            const matchQuery: FilterQuery<Product> = {};
+            const matchQuery: FilterQuery<Category> = {};
             matchQuery.$and = [
                 {
                     ...softDeleteCondition,
@@ -63,7 +56,7 @@ export class ProductRepository extends BaseRepository<Product> {
                 });
             }
 
-            const [result] = await this.productModel.aggregate([
+            const [result] = await this.categoryModel.aggregate([
                 {
                     $addFields: {
                         id: { $toString: '$_id' },
@@ -75,7 +68,7 @@ export class ProductRepository extends BaseRepository<Product> {
                     },
                 },
                 {
-                    $project: parseMongoProjection(ProductAttributesForList),
+                    $project: parseMongoProjection(CategoryAttributesForList),
                 },
                 {
                     $facet: {
@@ -109,8 +102,8 @@ export class ProductRepository extends BaseRepository<Product> {
             };
         } catch (error) {
             this.logger.error(
-                'Error in ProductRepository findAllAndCountProductByQuery: ' +
-                    error,
+                'Error in CategoryRepository findAllAndCountCategoryByQuery: ' +
+                error,
             );
             throw error;
         }

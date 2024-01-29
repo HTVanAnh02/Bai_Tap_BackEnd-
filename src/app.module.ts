@@ -22,7 +22,7 @@ import { HeaderMiddleware } from './modules/middleware/header.middleware';
         I18nModule,
         MongoModule,
         UserModule,
-        ProductModule
+        ProductModule,
     ],
     controllers: [AppController],
     providers: [

@@ -23,11 +23,13 @@ export class ProductService extends BaseService<Product, ProductRepository> {
             const product: SchemaCreateDocument<Product> = {
                 ...(dto as any),
             };
-            const res= await this.productRepository.createOne(product)
+            const res = await this.productRepository.createOne(product);
             // console.log(res)
             return res;
         } catch (error) {
-            this.logger.error('Error in productService createproduct: ' + error);
+            this.logger.error(
+                'Error in productService createproduct: ' + error,
+            );
             throw error;
         }
     }
@@ -37,7 +39,9 @@ export class ProductService extends BaseService<Product, ProductRepository> {
             await this.productRepository.updateOneById(id, dto);
             return await this.findProductById(id);
         } catch (error) {
-            this.logger.error('Error in ProductService updateProduct: ' + error);
+            this.logger.error(
+                'Error in ProductService updateProduct: ' + error,
+            );
             throw error;
         }
     }
@@ -47,7 +51,9 @@ export class ProductService extends BaseService<Product, ProductRepository> {
             await this.productRepository.softDeleteOne({ _id: id });
             return { id };
         } catch (error) {
-            this.logger.error('Error in ProductService deleteProduct: ' + error);
+            this.logger.error(
+                'Error in ProductService deleteProduct: ' + error,
+            );
             throw error;
         }
     }
@@ -59,18 +65,23 @@ export class ProductService extends BaseService<Product, ProductRepository> {
         try {
             return await this.productRepository.getOneById(id, attributes);
         } catch (error) {
-            this.logger.error('Error in ProductService findProductById: ' + error);
+            this.logger.error(
+                'Error in ProductService findProductById: ' + error,
+            );
             throw error;
         }
     }
     async findAllAndCountProductByQuery(query: GetProductListQuery) {
         try {
             const result =
-                await this.productRepository.findAllAndCountProductByQuery(query);
+                await this.productRepository.findAllAndCountProductByQuery(
+                    query,
+                );
             return result;
         } catch (error) {
             this.logger.error(
-                'Error in ProductService findAllAndCountProductByQuery: ' + error,
+                'Error in ProductService findAllAndCountProductByQuery: ' +
+                    error,
             );
             throw error;
         }
