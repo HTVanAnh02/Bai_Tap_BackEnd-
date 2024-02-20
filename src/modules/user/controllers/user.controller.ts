@@ -44,7 +44,7 @@ import { UserService } from '../services/user.service';
 // import { Role } from '../../../modules/decorator/roles.decorator';
 // import { RolesGuard } from '../../../modules/auth/role.guard';
 // import { RoleCollection } from '../../../database/utils/constants';
-import { CloudinaryService } from '@/common/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../../../common/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { log } from 'console';
 @ApiTags('User APIs')

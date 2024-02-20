@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { GetCategoryListQuery } from './category.interface';
 import { CategoryAttributesForList } from './category.contant';
-import { BaseRepository } from '@/common/base/base.repository';
+import { BaseRepository } from '../../../common/base/base.repository';
 import {
     DEFAULT_FIRST_PAGE,
     DEFAULT_LIMIT_FOR_PAGINATION,
@@ -16,8 +16,8 @@ import {
     DEFAULT_ORDER_DIRECTION,
     OrderDirection,
     softDeleteCondition,
-} from '@/common/constants';
-import { parseMongoProjection } from '@/common/helpers/commonFunctions';
+} from '../../../common/constants';
+import { parseMongoProjection } from '../../../common/helpers/commonFunctions';
 
 @Injectable()
 export class CategoryRepository extends BaseRepository<Category> {

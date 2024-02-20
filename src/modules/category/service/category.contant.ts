@@ -1,4 +1,4 @@
-import { Category } from '@/database/schemas/category.schema';
+import { Category } from '../../../database/schemas/category.schema';
 
 export enum CategoryOrderBy {
     ID = 'id',
