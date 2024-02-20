@@ -186,7 +186,7 @@ export class ProductController extends BaseController {
     @ApiResponseSuccess(getProductListSuccessResponseExample)
     @Get()
     async getProductList(
-        @Query(new JoiValidationPipe())
+        @Query()
         query: GetProductListQuery,
     ) {
         try {

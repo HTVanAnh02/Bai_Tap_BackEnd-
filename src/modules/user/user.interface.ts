@@ -134,7 +134,7 @@ export class loginUserDto {
         default: 'User name',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    username: string;
+    email: string;
 
     @ApiProperty({
         type: String,

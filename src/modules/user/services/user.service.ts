@@ -1,5 +1,5 @@
 import { BaseService } from '../../../common/base/base.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import {
     CreateUserDto,
@@ -102,11 +102,22 @@ export class UserService extends BaseService<User, UserRepository> {
                 },
             );
             return {
-                access_token: access_token,
-                refresh_token: refresh_token,
+                accessToken: {
+                    token: access_token,
+                    expiresIn: jwtConstants.expiresIn,
+                },
+                refreshToken: {
+                    token: refresh_token,
+                    expiresIn: jwtConstants.refresh_expiresIn,
+                },
+                profile: {
+                    email: data.email,
+                    _id: data.id,
+                    role: data.role,
+                },
             };
         } catch (error) {
-            this.logger.error('Error in UserService loginUser: ' + error);
+            this.logger.error('Error in autherService login: ' + error);
             throw error;
         }
     }
