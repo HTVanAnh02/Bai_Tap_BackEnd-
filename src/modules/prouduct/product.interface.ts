@@ -4,7 +4,7 @@ import { ProductOrderBy } from './product.contant';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import Joi from '../../plugins/joi';
 import { CommonListQuery } from '../../common/interfaces';
-import { RoleCollection } from '../../database/utils/constants';
+// import { RoleCollection } from '../../database/utils/constants';
 export class CreateProductDto {
     @ApiProperty({
         type: String,
@@ -19,19 +19,19 @@ export class CreateProductDto {
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    price: Number;
+    price: number;
 
     @ApiProperty({
         type: Number,
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    quantity: Number;
+    quantity: number;
 
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '...',
+        default: 0,
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     description: string;
@@ -39,7 +39,7 @@ export class CreateProductDto {
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '...',
+        default: 'url image',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).optional())
     imageUrl?: string;
@@ -59,19 +59,19 @@ export class UpdateProductDto {
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    price: Number;
+    price: number;
 
     @ApiProperty({
         type: Number,
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    quantity: Number;
+    quantity: number;
 
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '...',
+        default: 0,
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     description: string;
@@ -79,7 +79,7 @@ export class UpdateProductDto {
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '...',
+        default: 'Mo Ta',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).optional())
     imageUrl?: string;

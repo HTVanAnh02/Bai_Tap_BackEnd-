@@ -4,7 +4,7 @@ import { UserOrderBy } from './user.constant';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import Joi from '../../plugins/joi';
 import { CommonListQuery } from '../../common/interfaces';
-import { RoleCollection } from '../../database/utils/constants';
+// import { RoleCollection } from '../../database/utils/constants';
 
 export class CreateUserDto {
     @ApiProperty({
@@ -21,21 +21,41 @@ export class CreateUserDto {
         default: 'User name',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    username: string;
+    email: string;
 
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '',
+        default: 'email',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     password: string;
 
     @ApiProperty({
-        type: Boolean, // Thay đổi kiểu dữ liệu thành Boolean
-        default: false, // Giá trị mặc định cho kiểu boolean
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'birthday',
     })
-    //@JoiValidate(Joi.boolean().required())
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    birthday: string;
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'phone',
+    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    phone: string;
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'avatar',
+    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    avatar?: string;
+    @ApiProperty({
+        type: String,
+        default: '..',
+    })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     role: string;
 }
@@ -55,19 +75,39 @@ export class UpdateUserDto {
         default: 'User name',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    username: string;
+    email: string;
 
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '',
+        default: 'email',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     password: string;
 
     @ApiProperty({
-        type: Boolean, // Thay đổi kiểu dữ liệu thành Boolean
-        default: RoleCollection.USERS, // Giá trị mặc định cho kiểu boolean
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'birthday',
+    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    birthday: string;
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'phone',
+    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    phone: string;
+    @ApiProperty({
+        type: String,
+        default: '..',
+    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    avatar: string;
+    @ApiProperty({
+        type: String,
+        default: '..',
     })
     @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     role: string;
@@ -85,14 +125,6 @@ export class GetUserListQuery extends CommonListQuery {
             .optional(),
     )
     orderBy?: UserOrderBy;
-
-    // @ApiProperty({
-    //     type: String,
-    //     maxLength: INPUT_TEXT_MAX_LENGTH,
-    //     default: "User'name for filter",
-    // })
-    // @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).optional())
-    // name?: string;
 }
 
 export class loginUserDto {

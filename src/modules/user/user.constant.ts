@@ -12,8 +12,11 @@ export const UserAttributesForList: (keyof User)[] = [
     'name',
     'createdAt',
     'updatedAt',
-    'username',
+    'email',
     'password',
+    'birthday',
+    'phone',
+    'avatar',
     'role',
 ];
 
@@ -21,7 +24,10 @@ export const UserAttributesForDetail: (keyof User)[] = [
     '_id',
     'id',
     'name',
-    'username',
+    'email',
     'password',
+    'birthday',
+    'phone',
+    'avatar',
     'role',
 ];

@@ -6,13 +6,11 @@ import { CategoryService } from './category.service';
 import { CategoryRepository } from './category.repository';
 import { CloudinaryService } from '@/common/cloudinary/cloudinary.service';
 
-
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: Category.name, schema: CategorySchema },
         ]),
-       
     ],
     controllers: [CategoryController],
     providers: [CategoryService, CategoryRepository, CloudinaryService],

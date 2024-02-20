@@ -15,15 +15,22 @@ export type UserDocument = SchemaDocument<User>;
 })
 export class User extends MongoBaseSchema {
     @Prop({ required: true, type: String })
-    name: string;
+    name?: string;
 
     @Prop({ required: true, type: String })
-    username: string;
+    email?: string;
 
     @Prop({ required: true, type: String })
-    password: string;
+    password?: string;
 
-    @Prop({ required: true, type: String, default: RoleCollection.USERS })
+    @Prop({ type: String })
+    birthday?: string;
+
+    @Prop({ type: String })
+    phone?: string;
+    @Prop({ type: String })
+    avatar?: string;
+    @Prop({ type: String, default: RoleCollection.USERS })
     role: string;
 }
 const UserSchema = createSchemaForClass(User);

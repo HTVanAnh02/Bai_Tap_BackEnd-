@@ -9,7 +9,14 @@ import { FilterQuery, Model } from 'mongoose';
 import { GetCategoryListQuery } from './category.interface';
 import { CategoryAttributesForList } from './category.contant';
 import { BaseRepository } from '@/common/base/base.repository';
-import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION, OrderDirection,softDeleteCondition} from '@/common/constants';
+import {
+    DEFAULT_FIRST_PAGE,
+    DEFAULT_LIMIT_FOR_PAGINATION,
+    DEFAULT_ORDER_BY,
+    DEFAULT_ORDER_DIRECTION,
+    OrderDirection,
+    softDeleteCondition,
+} from '@/common/constants';
 import { parseMongoProjection } from '@/common/helpers/commonFunctions';
 
 @Injectable()
@@ -103,7 +110,7 @@ export class CategoryRepository extends BaseRepository<Category> {
         } catch (error) {
             this.logger.error(
                 'Error in CategoryRepository findAllAndCountCategoryByQuery: ' +
-                error,
+                    error,
             );
             throw error;
         }

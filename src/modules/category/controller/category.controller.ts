@@ -103,7 +103,9 @@ export class CategoryController extends BaseController {
                 );
             }
             if (file != null) {
-                await this.cloudinaryService.deleteImage(category.ImageCategory);
+                await this.cloudinaryService.deleteImage(
+                    category.ImageCategory,
+                );
                 const url = await this.cloudinaryService.uploadImage(file);
                 dto.imageUrl = url;
             } else {
@@ -191,7 +193,9 @@ export class CategoryController extends BaseController {
     ) {
         try {
             const result =
-                await this.categoryService.findAllAndCountCategoryByQuery(query);
+                await this.categoryService.findAllAndCountCategoryByQuery(
+                    query,
+                );
             return new SuccessResponse(result);
         } catch (error) {
             this.handleError(error);

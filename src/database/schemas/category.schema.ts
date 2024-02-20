@@ -5,7 +5,7 @@ import { createSchemaForClass } from '../utils/helper';
 export type CategoryDocument = SchemaDocument<Category>;
 @Schema({
     timestamps: true,
-    collection:CategoryCollection.CATEGORY,
+    collection: CategoryCollection.CATEGORY,
     toJSON: {
         virtuals: true,
     },
@@ -22,7 +22,7 @@ export class Category extends MongoBaseSchema {
 
     @Prop({ required: true, type: Date })
     CreatedDate: Date;
-    
+
     @Prop({ required: true, type: Date })
     UpdatedDate: Date;
 

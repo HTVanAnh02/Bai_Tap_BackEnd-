@@ -7,7 +7,8 @@ import {
     Delete,
     Get,
     Query,
-    UseGuards,
+    UseInterceptors,
+    UploadedFile,
 } from '@nestjs/common';
 import {
     ErrorResponse,
@@ -39,35 +40,44 @@ import { toObjectId } from '../../../common/helpers/commonFunctions';
 import { BaseController } from '../../../common/base/base.controller';
 import { JoiValidationPipe } from '../../../common/pipe/joi.validation.pipe';
 import { UserService } from '../services/user.service';
-import { AuthGuard } from '../../../modules/auth/auth.guard';
-import { Role } from '../../../modules/decorator/roles.decorator';
-import { RolesGuard } from '../../../modules/auth/role.guard';
-import { RoleCollection } from '../../../database/utils/constants';
+// import { AuthGuard } from '../../../modules/auth/auth.guard';
+// import { Role } from '../../../modules/decorator/roles.decorator';
+// import { RolesGuard } from '../../../modules/auth/role.guard';
+// import { RoleCollection } from '../../../database/utils/constants';
+import { CloudinaryService } from '@/common/cloudinary/cloudinary.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('User APIs')
 @Controller('user')
 export class UserController extends BaseController {
-    constructor(private readonly userService: UserService) {
+    constructor(
+        private readonly userService: UserService,
+        private readonly cloudinaryService: CloudinaryService,
+    ) {
         super();
     }
     @ApiOperation({ summary: 'Create User' })
     @ApiResponseError([SwaggerApiType.CREATE])
     @ApiResponseSuccess(createUserSuccessResponseExample)
     @ApiBody({ type: CreateUserDto })
+    @UseInterceptors(FileInterceptor('file'))
     @Post()
     async createUser(
         @Body(new TrimBodyPipe(), new JoiValidationPipe())
         dto: CreateUserDto,
+        @UploadedFile() file,
     ) {
-        //console.log(dto)
         try {
+            if (file != null) {
+                const url = await this.cloudinaryService.uploadImage(file);
+                dto.avatar = url;
+            }
             const result = await this.userService.createUser(dto);
-            //console.log(new SuccessResponse(result))
-            return new SuccessResponse(result);
+            return result;
         } catch (error) {
             this.handleError(error);
+            // Có thể thêm hành động khác tùy thuộc vào yêu cầu của bạn, ví dụ trả về response lỗi cụ thể.
         }
     }
-
     @ApiOperation({ summary: 'Update User by id' })
     @ApiResponseError([SwaggerApiType.UPDATE])
     @ApiResponseSuccess(updateUserSuccessResponseExample)
@@ -77,20 +87,27 @@ export class UserController extends BaseController {
         @Param('id', new JoiValidationPipe(mongoIdSchema)) id: string,
         @Body(new TrimBodyPipe(), new JoiValidationPipe())
         dto: UpdateUserDto,
+        @UploadedFile() file?,
     ) {
         try {
-            const user = await this.userService.findUserById(toObjectId(id));
-            if (!user) {
+            const usert = await this.userService.findUserById(toObjectId(id));
+            if (!usert) {
                 return new ErrorResponse(
                     HttpStatus.ITEM_NOT_FOUND,
-                    this.translate('user.error.notFound', {
+                    this.translate('Usert.error.notFound', {
                         args: {
                             id,
                         },
                     }),
                 );
             }
-
+            if (file != null) {
+                await this.cloudinaryService.deleteImage(usert.avatar);
+                const url = await this.cloudinaryService.uploadImage(file);
+                dto.avatar = url;
+            } else {
+                dto.avatar = usert.avatar;
+            }
             const result = await this.userService.updateUser(
                 toObjectId(id),
                 dto,
@@ -114,7 +131,7 @@ export class UserController extends BaseController {
             if (!user) {
                 return new ErrorResponse(
                     HttpStatus.ITEM_NOT_FOUND,
-                    this.translate('user.error.notFound', {
+                    this.translate('User.error.notFound', {
                         args: {
                             id,
                         },
@@ -122,6 +139,8 @@ export class UserController extends BaseController {
                 );
             }
 
+            //đoạn này chưa cần vì đang là xóa mềm
+            //await this.cloudinaryService.deleteImage(user.imageUrl);
             const result = await this.userService.deleteUser(toObjectId(id));
             return new SuccessResponse(result);
         } catch (error) {
