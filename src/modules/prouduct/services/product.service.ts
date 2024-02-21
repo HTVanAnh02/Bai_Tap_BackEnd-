@@ -1,5 +1,5 @@
 import { BaseService } from '../../../common/base/base.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import {
     CreateProductDto,
@@ -10,6 +10,7 @@ import {
 import { Product } from '../../../database/schemas/product.schema';
 import { ProductRepository } from '../product.repository';
 import { ProductAttributesForList } from '../product.contant';
+// import { log } from 'console';
 
 @Injectable()
 export class ProductService extends BaseService<Product, ProductRepository> {
@@ -62,6 +63,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
         id: Types.ObjectId,
         attributes: (keyof Product)[] = ProductAttributesForList,
     ) {
+        console.log(id);
         try {
             return await this.productRepository.getOneById(id, attributes);
         } catch (error) {

@@ -9,6 +9,7 @@ import {
     Query,
     UseInterceptors,
     UploadedFile,
+    // UseGuards,
 } from '@nestjs/common';
 import {
     ErrorResponse,
@@ -46,6 +47,10 @@ import { UserService } from '../services/user.service';
 // import { RoleCollection } from '../../../database/utils/constants';
 import { CloudinaryService } from '../../../common/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+// import { Role } from '@/modules/decorator/roles.decorator';
+// import { RoleCollection } from '@/database/utils/constants';
+// import { AuthGuard } from '@/modules/auth/auth.guard';
+// import { RolesGuard } from '@/modules/auth/role.guard';
 // import { log } from 'console';
 @ApiTags('User APIs')
 @Controller('user')
@@ -181,13 +186,13 @@ export class UserController extends BaseController {
     @ApiResponseSuccess(getUserListSuccessResponseExample)
     @Get()
     async getUserList(
-        @Query(new JoiValidationPipe())
+        @Query()
         query: GetUserListQuery,
     ) {
-        //console.log(query)
         try {
             const result =
                 await this.userService.findAllAndCountUserByQuery(query);
+            console.log(result);
             return new SuccessResponse(result);
         } catch (error) {
             this.handleError(error);

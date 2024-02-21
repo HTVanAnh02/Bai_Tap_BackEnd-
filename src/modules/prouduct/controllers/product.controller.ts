@@ -41,6 +41,7 @@ import { JoiValidationPipe } from '../../../common/pipe/joi.validation.pipe';
 import { ProductService } from '../services/product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../../../common/cloudinary/cloudinary.service';
+// import { log } from 'console';
 
 @ApiTags('Product APIs')
 @Controller('product')
@@ -75,7 +76,6 @@ export class ProductController extends BaseController {
             // Có thể thêm hành động khác tùy thuộc vào yêu cầu của bạn, ví dụ trả về response lỗi cụ thể.
         }
     }
-
     @ApiOperation({ summary: 'Update Product by id' })
     @ApiResponseError([SwaggerApiType.UPDATE])
     @ApiResponseSuccess(updateProductSuccessResponseExample)
@@ -192,6 +192,7 @@ export class ProductController extends BaseController {
         try {
             const result =
                 await this.productService.findAllAndCountProductByQuery(query);
+
             return new SuccessResponse(result);
         } catch (error) {
             this.handleError(error);
