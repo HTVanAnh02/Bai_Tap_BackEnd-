@@ -88,14 +88,16 @@ export class UserController extends BaseController {
     @ApiResponseError([SwaggerApiType.UPDATE])
     @ApiResponseSuccess(updateUserSuccessResponseExample)
     @ApiBody({ type: UpdateUserDto })
+    // @UseInterceptors(FileInterceptor('file'))
     @Patch(':id')
     async updateUser(
         @Param('id', new JoiValidationPipe(mongoIdSchema)) id: string,
-        @Body(new TrimBodyPipe(), new JoiValidationPipe())
+        @Body(new TrimBodyPipe())
         dto: UpdateUserDto,
-        @UploadedFile() file?,
     ) {
         try {
+            console.log(dto);
+
             const usert = await this.userService.findUserById(toObjectId(id));
             if (!usert) {
                 return new ErrorResponse(
@@ -107,13 +109,13 @@ export class UserController extends BaseController {
                     }),
                 );
             }
-            if (file != null) {
-                await this.cloudinaryService.deleteImage(usert.avatar);
-                const url = await this.cloudinaryService.uploadImage(file);
-                dto.avatar = url;
-            } else {
-                dto.avatar = usert.avatar;
-            }
+            // if (file != null) {
+            //     await this.cloudinaryService.deleteImage(usert.avatar);
+            //     const url = await this.cloudinaryService.uploadImage(file);
+            //     dto.avatar = url;
+            // } else {
+            //     dto.avatar = usert.avatar;
+            // }
             const result = await this.userService.updateUser(
                 toObjectId(id),
                 dto,
@@ -192,7 +194,7 @@ export class UserController extends BaseController {
         try {
             const result =
                 await this.userService.findAllAndCountUserByQuery(query);
-            console.log(result);
+            // console.log(result);
             return new SuccessResponse(result);
         } catch (error) {
             this.handleError(error);
