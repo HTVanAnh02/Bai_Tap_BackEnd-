@@ -41,17 +41,9 @@ import { toObjectId } from '../../../common/helpers/commonFunctions';
 import { BaseController } from '../../../common/base/base.controller';
 import { JoiValidationPipe } from '../../../common/pipe/joi.validation.pipe';
 import { UserService } from '../services/user.service';
-// import { AuthGuard } from '../../../modules/auth/auth.guard';
-// import { Role } from '../../../modules/decorator/roles.decorator';
-// import { RolesGuard } from '../../../modules/auth/role.guard';
-// import { RoleCollection } from '../../../database/utils/constants';
 import { CloudinaryService } from '../../../common/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { Role } from '@/modules/decorator/roles.decorator';
-// import { RoleCollection } from '@/database/utils/constants';
-// import { AuthGuard } from '@/modules/auth/auth.guard';
-// import { RolesGuard } from '@/modules/auth/role.guard';
-// import { log } from 'console';
+// import { ref } from 'joi';
 @ApiTags('User APIs')
 @Controller('user')
 export class UserController extends BaseController {
@@ -96,8 +88,6 @@ export class UserController extends BaseController {
         dto: UpdateUserDto,
     ) {
         try {
-            console.log(dto);
-
             const usert = await this.userService.findUserById(toObjectId(id));
             if (!usert) {
                 return new ErrorResponse(
@@ -109,13 +99,6 @@ export class UserController extends BaseController {
                     }),
                 );
             }
-            // if (file != null) {
-            //     await this.cloudinaryService.deleteImage(usert.avatar);
-            //     const url = await this.cloudinaryService.uploadImage(file);
-            //     dto.avatar = url;
-            // } else {
-            //     dto.avatar = usert.avatar;
-            // }
             const result = await this.userService.updateUser(
                 toObjectId(id),
                 dto,
@@ -181,8 +164,6 @@ export class UserController extends BaseController {
             this.handleError(error);
         }
     }
-    // @Role(RoleCollection.Admin)
-    // @UseGuards(AuthGuard,RolesGuard)
     @ApiOperation({ summary: 'Get User list' })
     @ApiResponseError([SwaggerApiType.GET_LIST])
     @ApiResponseSuccess(getUserListSuccessResponseExample)
