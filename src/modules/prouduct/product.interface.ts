@@ -3,9 +3,9 @@ import { JoiValidate } from '../../common/decorators/validator.decorator';
 import { ProductOrderBy } from './product.contant';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import Joi from '../../plugins/joi';
-import { CommonListQuery } from '../../common/interfaces';
+import { CommonDto, CommonListQuery } from '../../common/interfaces';
 // import { RoleCollection } from '../../database/utils/constants';
-export class CreateProductDto {
+export class CreateProductDto extends CommonDto {
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,
@@ -45,7 +45,7 @@ export class CreateProductDto {
     imageUrl?: string;
 }
 
-export class UpdateProductDto {
+export class UpdateProductDto extends CommonDto {
     @ApiProperty({
         type: String,
         maxLength: INPUT_TEXT_MAX_LENGTH,

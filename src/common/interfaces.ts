@@ -13,6 +13,7 @@ import {
 import { JoiValidate } from './decorators/validator.decorator';
 import Joi from '../plugins/joi';
 import { Types } from 'mongoose';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CommonListQuery {
     @ApiPropertyOptional({
@@ -158,4 +159,22 @@ export interface ILoggedInApiAccessToken {
     _id: Types.ObjectId;
     isPlatformAdmin: boolean;
     organizationIds: string[];
+}
+
+export class CommonDto {
+    @IsOptional()
+    @IsString({ message: 'Tên sản phẩm phải là một chuỗi ký tự' })
+    id?: string;
+    @IsOptional()
+    createdAt?: Date;
+    @IsOptional()
+    updatedAt?: Date;
+    @IsOptional()
+    deletedAt?: Date;
+    @IsOptional()
+    deletedBy?: Types.ObjectId;
+    @IsOptional()
+    updatedBy?: Types.ObjectId;
+    @IsOptional()
+    createdBy?: Types.ObjectId;
 }

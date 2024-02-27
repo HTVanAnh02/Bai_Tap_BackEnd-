@@ -17,13 +17,9 @@ export class HeaderMiddleware implements NestMiddleware {
     use(req: Request, _res: Response, next: NextFunction) {
         if (!req.headers[TIMEZONE_HEADER]) {
             req.headers[TIMEZONE_HEADER] = DEAULT_TIMEZONE;
-            // console.log(1)
-            // console.log(req.headers[TIMEZONE_HEADER]);
         }
         if (!req.headers[TIMEZONE_NAME_HEADER]) {
             req.headers[TIMEZONE_NAME_HEADER] = DEFAULT_TIMEZONE_NAME;
-            // console.log(2)
-            // console.log(req.headers[TIMEZONE_NAME_HEADER])
         }
         if (!req.headers['accept-language']) {
             req.headers['accept-language'] = DEFAULT_LANGUAGE;

@@ -1,10 +1,12 @@
-import { BaseRepository } from '../../common/base/base.repository';
-import { User, UserDocument } from '../../database/schemas/user.schema';
-
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
+// import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION,OrderDirection,softDeleteCondition } from ../../../common/constants";
+import { BaseRepository } from '../../common/base/base.repository';
 import { GetUserListQuery } from './user.interface';
+import { parseMongoProjection } from '../../common/helpers/commonFunctions';
+import { UserAttributesForList } from './user.constant';
+import { User, UserDocument } from '../../database/schemas/user.schema';
 import {
     DEFAULT_FIRST_PAGE,
     DEFAULT_LIMIT_FOR_PAGINATION,
@@ -13,19 +15,17 @@ import {
     OrderDirection,
     softDeleteCondition,
 } from '../../common/constants';
-import { parseMongoProjection } from '../../common/helpers/commonFunctions';
-import { UserAttributesForList } from './user.constant';
 
 @Injectable()
 export class UserRepository extends BaseRepository<User> {
     constructor(
         @InjectModel(User.name)
-        private readonly userModel: Model<UserDocument>,
+        private readonly UserModel: Model<UserDocument>,
     ) {
-        super(userModel);
+        super(UserModel);
     }
 
-    async findAllAndCountUserByQuery(query: GetUserListQuery) {
+    async findAllAndCountUserByQuery(query: GetUserListQuery, userId?: string) {
         try {
             const {
                 keyword = '',
@@ -33,14 +33,7 @@ export class UserRepository extends BaseRepository<User> {
                 limit = +DEFAULT_LIMIT_FOR_PAGINATION,
                 orderBy = DEFAULT_ORDER_BY,
                 orderDirection = DEFAULT_ORDER_DIRECTION,
-                // name = '',
             } = query;
-            // console.log(keyword)
-            // console.log(page)
-            // console.log(limit)
-            // console.log(orderBy)
-            // console.log(orderDirection)
-            // console.log(name)
             const matchQuery: FilterQuery<User> = {};
             matchQuery.$and = [
                 {
@@ -50,17 +43,21 @@ export class UserRepository extends BaseRepository<User> {
 
             if (keyword) {
                 matchQuery.$and.push({
-                    name: { $regex: `.*${keyword}.*`, $options: 'i' },
+                    $or: [
+                        { name: { $regex: `.*${keyword}.*`, $options: 'i' } },
+                        { phone: { $regex: `.*${keyword}.*`, $options: 'i' } },
+                        { email: { $regex: `.*${keyword}.*`, $options: 'i' } },
+                    ],
                 });
             }
 
-            // if (name) {
-            //     matchQuery.$and.push({
-            //         name,
-            //     });
-            // }
+            if (userId) {
+                matchQuery.$and.push({
+                    _id: { $ne: new Types.ObjectId(userId) },
+                });
+            }
 
-            const [result] = await this.userModel.aggregate([
+            const [result] = await this.UserModel.aggregate([
                 {
                     $addFields: {
                         id: { $toString: '$_id' },
@@ -106,7 +103,8 @@ export class UserRepository extends BaseRepository<User> {
             };
         } catch (error) {
             this.logger.error(
-                'Error in UserRepository findAllAndCountUserByQuery: ' + error,
+                'Error in ProductRepository findAllAndCountProductByQuery: ' +
+                    error,
             );
             throw error;
         }

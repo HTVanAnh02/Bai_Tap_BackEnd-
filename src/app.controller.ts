@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AppService } from './app.service';
 
-@ApiTags('Ping API')
 @Controller()
 export class AppController {
-    @ApiOperation({ summary: 'Ping system alive' })
-    @Get('ping')
-    pingAlive() {
-        return 'pong';
+    constructor(private readonly appService: AppService) {}
+
+    @Get()
+    getHello(): string {
+        return this.appService.getHello();
     }
 }

@@ -5,12 +5,16 @@ import { ROLES_KEY } from '../decorator/roles.decorator';
 export class RolesGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) {}
     canActivate(context: ExecutionContext): boolean {
-        const request = context.switchToHttp().getRequest();
-        const role = this.reflector.getAllAndMerge(ROLES_KEY, [
-            context.getClass(),
-            context.getHandler(),
-        ]);
-        if (role === request.user.data.role) return true;
-        return false;
+        try {
+            const request = context.switchToHttp().getRequest();
+            const role = this.reflector.getAllAndMerge(ROLES_KEY, [
+                context.getClass(),
+                context.getHandler(),
+            ]);
+            if (role === request.loggedInUser.data.role) return true;
+            return false;
+        } catch (error) {
+            console.log('Error Role Guard ts ' + error);
+        }
     }
 }

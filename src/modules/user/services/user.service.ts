@@ -1,53 +1,44 @@
 import { BaseService } from '../../../common/base/base.service';
-import { Injectable } from '@nestjs/common';
-import { Types } from 'mongoose';
-import {
-    CreateUserDto,
-    GetUserListQuery,
-    UpdateUserDto,
-    loginUserDto,
-} from '../user.interface';
-
 import { User } from '../../../database/schemas/user.schema';
 import { UserRepository } from '../user.repository';
-import { UserAttributesForDetail } from '../user.constant';
-import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from '../../../modules/auth/constants';
+import { Injectable } from '@nestjs/common';
+import {
+    GetUserListQuery,
+    createUserDto,
+    UpdateUserDto,
+} from '../user.interface';
+import { Types } from 'mongoose';
+import { UserAttributesForList } from '../user.constant';
 
 @Injectable()
 export class UserService extends BaseService<User, UserRepository> {
-    constructor(
-        private readonly userRepository: UserRepository,
-        private jwtService: JwtService,
-    ) {
+    constructor(private readonly userRepository: UserRepository) {
         super(userRepository);
     }
-
-    async createUser(dto: CreateUserDto) {
+    async createUser(dto: createUserDto) {
         try {
             // console.log({...(dto as any)})
             const user: SchemaCreateDocument<User> = {
                 ...(dto as any),
             };
             const res = await this.userRepository.createOne(user);
-            // console.log(res)
             return res;
         } catch (error) {
-            this.logger.error('Error in UserService createUser: ' + error);
+            this.logger.error('Error in userService createuser: ' + error);
             throw error;
         }
     }
-
-    async updateUser(id: Types.ObjectId, dto: UpdateUserDto) {
+    async findUserById(
+        id: Types.ObjectId,
+        attributes: (keyof User)[] = UserAttributesForList,
+    ) {
         try {
-            await this.userRepository.updateOneById(id, dto);
-            return await this.findUserById(id);
+            return await this.userRepository.getOneById(id, attributes);
         } catch (error) {
-            this.logger.error('Error in UserService updateUser: ' + error);
+            this.logger.error('Error in userService finduserById: ' + error);
             throw error;
         }
     }
-
     async deleteUser(id: Types.ObjectId) {
         try {
             await this.userRepository.softDeleteOne({ _id: id });
@@ -57,23 +48,12 @@ export class UserService extends BaseService<User, UserRepository> {
             throw error;
         }
     }
-
-    async findUserById(
-        id: Types.ObjectId,
-        attributes: (keyof User)[] = UserAttributesForDetail,
-    ) {
+    async findAllAndCountUserByQuery(query: GetUserListQuery, id: string) {
         try {
-            return await this.userRepository.getOneById(id, attributes);
-        } catch (error) {
-            this.logger.error('Error in UserService findUserById: ' + error);
-            throw error;
-        }
-    }
-
-    async findAllAndCountUserByQuery(query: GetUserListQuery) {
-        try {
-            const result =
-                await this.userRepository.findAllAndCountUserByQuery(query);
+            const result = await this.userRepository.findAllAndCountUserByQuery(
+                query,
+                id,
+            );
             return result;
         } catch (error) {
             this.logger.error(
@@ -82,42 +62,22 @@ export class UserService extends BaseService<User, UserRepository> {
             throw error;
         }
     }
-
-    async loginUser(dto: loginUserDto) {
+    async updateUser(id: Types.ObjectId, dto: UpdateUserDto) {
         try {
-            const data = await this.userRepository.findOne(dto);
-            if (!data) return null;
-            const access_token = await this.jwtService.signAsync(
-                { data },
-                {
-                    secret: jwtConstants.secret,
-                    expiresIn: jwtConstants.expiresIn,
-                },
-            );
-            const refresh_token = await this.jwtService.signAsync(
-                { data },
-                {
-                    secret: jwtConstants.secret,
-                    expiresIn: jwtConstants.refresh_expiresIn,
-                },
-            );
-            return {
-                accessToken: {
-                    token: access_token,
-                    expiresIn: jwtConstants.expiresIn,
-                },
-                refreshToken: {
-                    token: refresh_token,
-                    expiresIn: jwtConstants.refresh_expiresIn,
-                },
-                profile: {
-                    email: data.email,
-                    _id: data.id,
-                    role: data.role,
-                },
-            };
+            await this.userRepository.updateOneById(id, dto);
+            return await this.findUserById(id);
         } catch (error) {
-            this.logger.error('Error in autherService login: ' + error);
+            this.logger.error('Error in UserService updateUser: ' + error);
+            throw error;
+        }
+    }
+    async findUserByEmail(email: string) {
+        try {
+            return await this.userRepository.findOne({
+                email: email,
+            });
+        } catch (error) {
+            this.logger.error('Error in UserService updateUser: ' + error);
             throw error;
         }
     }

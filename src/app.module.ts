@@ -1,44 +1,34 @@
-import { MiddlewareConsumer, Module, NestModule, Scope } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule } from '@nestjs/config';
-import envSchema from './common/config/validation-schema';
-import { I18nModule } from './i18n/i18n.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { HttpExceptionFilter } from './common/exceptions.filter';
-import { MongoModule } from './common/services/mongo.service';
-import { CommonModule } from './modules/common/common.module';
+import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auht.module';
+import { seedService } from './seed/seed.service';
 import { ProductModule } from './modules/prouduct/product.module';
-import { TransformInterceptor } from './modules/common/transform.interceptor';
-import { HeaderMiddleware } from './modules/middleware/header.middleware';
+import { I18nModule } from './i18n/i18n.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
     imports: [
         ConfigModule.forRoot({
             envFilePath: '.env',
             isGlobal: true,
-            validationSchema: envSchema,
         }),
-        CommonModule,
-        I18nModule,
-        MongoModule,
-        UserModule,
         ProductModule,
+        UserModule,
+        AuthModule,
+        I18nModule,
+        MongooseModule.forRoot(
+            'mongodb+srv://vanh:trieu2972002@cluster0.aycyzga.mongodb.net/',
+        ),
     ],
     controllers: [AppController],
-    providers: [
-        {
-            provide: APP_FILTER,
-            scope: Scope.REQUEST,
-            useClass: HttpExceptionFilter,
-        },
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: TransformInterceptor,
-        },
-    ],
+    providers: [AppService, seedService],
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(HeaderMiddleware).forRoutes('*');
+export class AppModule implements OnModuleInit {
+    constructor(private readonly seederService: seedService) {}
+
+    async onModuleInit() {
+        await this.seederService.seedData();
     }
 }

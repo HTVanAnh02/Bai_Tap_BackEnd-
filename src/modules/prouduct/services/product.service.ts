@@ -10,7 +10,6 @@ import {
 import { Product } from '../../../database/schemas/product.schema';
 import { ProductRepository } from '../product.repository';
 import { ProductAttributesForList } from '../product.contant';
-// import { log } from 'console';
 
 @Injectable()
 export class ProductService extends BaseService<Product, ProductRepository> {
@@ -85,6 +84,16 @@ export class ProductService extends BaseService<Product, ProductRepository> {
                 'Error in ProductService findAllAndCountProductByQuery: ' +
                     error,
             );
+            throw error;
+        }
+    }
+    async finProductByName(name: string) {
+        try {
+            return await this.productRepository.findOne({
+                name: name,
+            });
+        } catch (error) {
+            this.logger.error('Error in UserService updateUser: ' + error);
             throw error;
         }
     }

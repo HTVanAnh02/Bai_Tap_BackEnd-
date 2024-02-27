@@ -1,9 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CategoryOrderBy } from './category.contant';
-import { JoiValidate } from '@/common/decorators/validator.decorator';
-import { INPUT_TEXT_MAX_LENGTH } from '@/common/constants';
-import Joi from '@/plugins/joi';
-import { CommonListQuery } from '@/common/interfaces';
+import { JoiValidate } from '../../../common/decorators/validator.decorator';
+import { INPUT_TEXT_MAX_LENGTH } from '../../../common/constants';
+import Joi from '../../../plugins/joi';
+import { CommonListQuery } from '../../../common/interfaces';
 export class CreateCategoryDto {
     @ApiProperty({
         type: String,
@@ -18,14 +18,14 @@ export class CreateCategoryDto {
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    price: Number;
+    price: number;
 
     @ApiProperty({
         type: Number,
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    quantity: Number;
+    quantity: number;
 
     @ApiProperty({
         type: String,
@@ -58,14 +58,14 @@ export class UpdateCategoryDto {
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    price: Number;
+    price: number;
 
     @ApiProperty({
         type: Number,
         default: 0,
     })
     @JoiValidate(Joi.number().required())
-    quantity: Number;
+    quantity: number;
 
     @ApiProperty({
         type: String,

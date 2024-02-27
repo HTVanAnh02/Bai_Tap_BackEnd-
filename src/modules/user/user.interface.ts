@@ -1,146 +1,67 @@
-import { INPUT_TEXT_MAX_LENGTH } from '../../common/constants';
-import { JoiValidate } from '../../common/decorators/validator.decorator';
+import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
 import { UserOrderBy } from './user.constant';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import Joi from '../../plugins/joi';
-import { CommonListQuery } from '../../common/interfaces';
-// import { RoleCollection } from '../../database/utils/constants';
+import { CommonDto, CommonListQuery } from '../../common/interfaces';
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-export class CreateUserDto {
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'name',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+export class createUserDto extends CommonDto {
+    @IsNotEmpty({ message: 'Name không được để trống' })
+    @IsString({ message: 'Name phải là một chuỗi' })
     name: string;
 
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'User name',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    @IsString({ message: 'Email phải là một chuỗi' })
+    @Matches(emailRegex, { message: 'Email không đúng định dạng' })
+    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
     email: string;
 
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'email',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    password: string;
+    @IsOptional()
+    @IsString({ message: 'Password phải là một chuỗi' })
+    password?: string;
 
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'birthday',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    @IsNotEmpty({ message: 'birthday không được để trống' })
+    @IsString({ message: 'Phải là một chuỗi' })
     birthday: string;
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'phone',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+
+    @IsNotEmpty({ message: 'Không được để trống' })
+    @IsString({ message: 'Phải là một chuỗi' })
     phone: string;
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'avatar',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    avatar?: string;
-    @ApiProperty({
-        type: String,
-        default: '..',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    role: string;
+
+    @IsString()
+    @IsOptional()
+    role?: string;
+
+    @IsNotEmpty({ message: 'Ảnh không được để trống' })
+    @IsString({ message: 'Ảnh phải là một chuỗi' })
+    avatar: string;
 }
 
-export class UpdateUserDto {
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'name',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+export class UpdateUserDto extends CommonDto {
+    @IsNotEmpty({ message: 'Name không được để trống' })
+    @IsString({ message: 'Name phải là một chuỗi' })
     name: string;
 
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'User name',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    @IsString({ message: 'Email phải là một chuỗi' })
+    @Matches(emailRegex, { message: 'Email không đúng định dạng' })
+    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
     email: string;
 
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'email',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    password: string;
-
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'birthday',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    @IsNotEmpty({ message: 'birthday không được để trống' })
+    @IsString({ message: 'Phải là một chuỗi' })
     birthday: string;
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'phone',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+
+    @IsNotEmpty({ message: 'Không được để trống' })
+    @IsString({ message: 'Phải là một chuỗi' })
     phone: string;
-    @ApiProperty({
-        type: String,
-        default: '..',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    avatar: string;
-    @ApiProperty({
-        type: String,
-        default: '..',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    role: string;
+
+    @IsString()
+    @IsOptional()
+    role?: string;
+
+    @IsString()
+    @IsOptional()
+    avatar?: string;
 }
 
 export class GetUserListQuery extends CommonListQuery {
-    @ApiPropertyOptional({
-        enum: UserOrderBy,
-        description: 'Which field used to sort',
-        default: UserOrderBy.UPDATED_AT,
-    })
-    @JoiValidate(
-        Joi.string()
-            .valid(...Object.values(UserOrderBy))
-            .optional(),
-    )
     orderBy?: UserOrderBy;
-}
-
-export class loginUserDto {
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: 'User name',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    email: string;
-
-    @ApiProperty({
-        type: String,
-        maxLength: INPUT_TEXT_MAX_LENGTH,
-        default: '',
-    })
-    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
-    password: string;
+    phone?: string;
 }

@@ -1,4 +1,9 @@
 import Joi from '../plugins/joi';
+export const jwtConstants = {
+    secret: 'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
+    expiresIn: 100,
+    refresh_expiresIn: 150,
+};
 
 export enum Languages {
     EN = 'en',
@@ -58,7 +63,6 @@ export const Regex = {
     DEVICE_NAME: /^[A-Za-z0-9+=.,@-_]*$/,
     RECOVERY_CODE: /^[A-Z0-9-\s]*$/,
 };
-
 export const softDeleteCondition = {
     $or: [
         {
@@ -140,4 +144,8 @@ export enum NodeEnv {
     PRODUCTION = 'production',
     STAGING = 'staging',
     TEST = 'test',
+}
+export enum RoleCollection {
+    USERS = 'User',
+    Admin = 'Admin',
 }
