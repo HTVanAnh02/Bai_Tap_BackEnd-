@@ -28,7 +28,8 @@ import { UserService } from '../services/user.service';
 import { TrimBodyPipe } from '../../../common/pipe/trim.body.pipe';
 import { SuccessResponse } from '../../../common/helpers/response';
 import { toObjectId } from '../../../common/helpers/commonFunctions';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('User APIs')
 @Controller('user')
 export class UserController extends BaseController {
     constructor(
@@ -64,7 +65,7 @@ export class UserController extends BaseController {
                 );
             }
             dto.createdBy = loggedInUser.data.id;
-            dto.password = 't12345678';
+            dto.password = 'vanh1234';
             const result = await this.userService.createUser(dto);
             return new SuccessResponse(result);
         } catch (error) {
