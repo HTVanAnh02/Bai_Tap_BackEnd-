@@ -1,4 +1,4 @@
-import { INPUT_TEXT_MAX_LENGTH } from '@/common/constants';
+import { INPUT_TEXT_MAX_LENGTH } from '../../common/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, Matches } from 'class-validator';
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

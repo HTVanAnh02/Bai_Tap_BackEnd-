@@ -6,7 +6,7 @@ import { UserRepository } from './user.repository';
 import { User, UserSchema } from '../../database/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import { CloudinaryService } from '../../common/cloudinary/cloudinary.service';
-import { I18nService } from '@/i18n/i18n.service';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Module({
     imports: [
