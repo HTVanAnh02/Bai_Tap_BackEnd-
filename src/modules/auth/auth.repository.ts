@@ -12,4 +12,14 @@ export class AuthRepository extends BaseRepository<User> {
     ) {
         super(userModel);
     }
+    async createUser(email: string, password: string): Promise<User> {
+        const user = new User();
+        user.email = email;
+        user.password = password;
+
+        // Log để kiểm tra
+        // console.log('Creating user:', user);
+
+        return await this.userModel.create(user);
+    }
 }

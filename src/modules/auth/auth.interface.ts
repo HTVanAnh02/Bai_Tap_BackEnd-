@@ -20,3 +20,22 @@ export class LoginDto {
     })
     password: string;
 }
+
+export class RegisterDto {
+    @Matches(emailRegex, { message: 'Email không đúng định dạng' })
+    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'email',
+    })
+    email: string;
+    @IsString()
+    @IsNotEmpty({ message: 'Mật khẩu không để trống' })
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'password',
+    })
+    password: string;
+}

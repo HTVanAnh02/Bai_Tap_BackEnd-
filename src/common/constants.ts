@@ -4,7 +4,10 @@ export const jwtConstants = {
     expiresIn: 15000,
     refresh_expiresIn: 3600,
 };
-
+export const jwtConstantsRegister = {
+    secret: 'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
+    expiresIn: 120,
+};
 export enum Languages {
     EN = 'en',
     JA = 'ja',
