@@ -77,7 +77,7 @@ export class AuthController extends BaseController {
     async getProfile(@Headers('Authorization') authorizationHeader: string) {
         try {
             const token = authorizationHeader.split(' ')[1];
-            console.log(token);
+            // console.log(token);
 
             const decodedToken: any = this.jwtService.verify(token, {
                 secret: jwtConstants.secret,

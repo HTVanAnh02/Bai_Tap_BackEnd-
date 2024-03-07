@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auht.module';
-import { seedService } from './seed/seed.service';
 import { ProductModule } from './modules/prouduct/product.module';
 import { I18nModule } from './i18n/i18n.module';
 import { ConfigModule } from '@nestjs/config';
+import { seedService } from './seed/seed.service';
 @Module({
     imports: [
         ConfigModule.forRoot({

@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './auth.interface';
 import { jwtConstants } from '../../common/constants';
 import * as bcrypt from 'bcrypt';
+// import { log } from 'console';
 // import { AuthRepository } from './auth.repository';
 
 @Injectable()
@@ -112,7 +113,6 @@ export class AuthService extends BaseService<User, AuthRepository> {
                     email: data.email,
                     _id: data.id,
                     role: data.role,
-                    avatar: data.avatar,
                 },
             };
         } catch (error) {
@@ -127,16 +127,21 @@ export class AuthService extends BaseService<User, AuthRepository> {
             );
         }
     }
-
-    async checkEmailExists(email: string): Promise<boolean> {
-        const user = await this.authRepository.findOne({ email });
-        return !!user;
+    async generateToken(data: any, secret: string, expiresIn: number) {
+        try {
+            const token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: secret,
+                    expiresIn: expiresIn,
+                },
+            );
+            return token;
+        } catch (e) {
+            console.log('Error generateToken authService');
+        }
     }
 
-    async generateToken(user: User): Promise<string> {
-        const payload = { email: user.email, sub: user.id };
-        return await this.jwtService.sign(payload);
-    }
     async getProfile(accessToken: string) {
         try {
             // Xác thực và giải mã token

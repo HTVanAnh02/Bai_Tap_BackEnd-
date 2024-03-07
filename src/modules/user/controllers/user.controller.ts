@@ -81,7 +81,7 @@ export class UserController extends BaseController {
         @Body(new TrimBodyPipe())
         dto: UpdateUserDto,
         // @UploadedFile() file,
-        @LoggedInUser() loggedInUser,
+        // @LoggedInUser() loggedInUser,
     ) {
         try {
             const isValid = mongoose.Types.ObjectId.isValid(id);
@@ -106,11 +106,14 @@ export class UserController extends BaseController {
                     );
                 }
             }
-            dto.updatedBy = loggedInUser.data.id;
+
+            // dto.updatedBy = loggedInUser.data.id;
             const result = await this.userService.updateUser(
                 toObjectId(id),
                 dto,
             );
+            // console.log(result);
+
             if (result) return new SuccessResponse(result);
             throw new HttpException(
                 'Cập nhật thất bại',
