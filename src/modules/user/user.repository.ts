@@ -40,17 +40,16 @@ export class UserRepository extends BaseRepository<User> {
                     ...softDeleteCondition,
                 },
             ];
-
             if (keyword) {
+                const keywordRegex = new RegExp(`.*${keyword}.*`, 'i');
                 matchQuery.$and.push({
                     $or: [
-                        { name: { $regex: `.*${keyword}.*`, $options: 'i' } },
-                        { phone: { $regex: `.*${keyword}.*`, $options: 'i' } },
-                        { email: { $regex: `.*${keyword}.*`, $options: 'i' } },
+                        { name: { $regex: keywordRegex } },
+                        { email: { $regex: keywordRegex } },
+                        { phone: { $regex: keywordRegex } },
                     ],
                 });
             }
-
             if (userId) {
                 matchQuery.$and.push({
                     _id: { $ne: new Types.ObjectId(userId) },

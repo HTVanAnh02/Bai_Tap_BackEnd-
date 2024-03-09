@@ -37,6 +37,8 @@ export class ProductRepository extends BaseRepository<Product> {
                 orderBy = DEFAULT_ORDER_BY,
                 orderDirection = DEFAULT_ORDER_DIRECTION,
                 name = '',
+                price = '',
+                feedback = '',
             } = query;
             const matchQuery: FilterQuery<Product> = {};
             matchQuery.$and = [
@@ -44,10 +46,9 @@ export class ProductRepository extends BaseRepository<Product> {
                     ...softDeleteCondition,
                 },
             ];
-
-            if (keyword) {
+            if (feedback) {
                 matchQuery.$and.push({
-                    name: { $regex: `.*${keyword}.*`, $options: 'i' },
+                    feedback,
                 });
             }
 
@@ -56,7 +57,32 @@ export class ProductRepository extends BaseRepository<Product> {
                     name,
                 });
             }
-
+            const sortStage: any = {};
+            if (!price) {
+                sortStage.$sort = {
+                    [orderBy]: orderDirection === OrderDirection.ASC ? 1 : -1,
+                };
+            } else {
+                if (price === 'asc') {
+                    sortStage.$sort = {
+                        price: 1,
+                    };
+                }
+                if (price === 'desc') {
+                    sortStage.$sort = {
+                        price: -1,
+                    };
+                }
+            }
+            if (keyword) {
+                const keywordRegex = new RegExp(`.*${keyword}.*`, 'i');
+                matchQuery.$and.push({
+                    $or: [
+                        { name: { $regex: keywordRegex } },
+                        { description: { $regex: keywordRegex } },
+                    ],
+                });
+            }
             const [result] = await this.productModel.aggregate([
                 {
                     $addFields: {

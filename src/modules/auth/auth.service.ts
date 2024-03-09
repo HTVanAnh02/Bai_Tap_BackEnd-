@@ -26,7 +26,6 @@ export class AuthService extends BaseService<User, AuthRepository> {
     async Login(dto: LoginDto) {
         try {
             const data = await this.authRepository.findOne(dto);
-
             if (!data) return null;
             const access_token = await this.jwtService.signAsync(
                 { data },

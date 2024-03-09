@@ -18,7 +18,7 @@ import { JwtService } from '@nestjs/jwt';
 // import { date } from 'joi';
 
 @ApiTags('Auth APIs')
-@Controller('Auth')
+@Controller('auth')
 export class AuthController extends BaseController {
     constructor(
         private readonly authService: AuthService,
