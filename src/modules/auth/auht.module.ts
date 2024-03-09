@@ -5,13 +5,14 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
+import { BcryptService } from './bcrypt.service';
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ],
     controllers: [AuthController],
-    providers: [AuthService, AuthRepository, JwtService],
+    providers: [AuthService, AuthRepository, JwtService, BcryptService],
     exports: [AuthRepository],
 })
 export class AuthModule {}

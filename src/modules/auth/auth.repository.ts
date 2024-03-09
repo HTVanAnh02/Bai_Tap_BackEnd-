@@ -12,11 +12,19 @@ export class AuthRepository extends BaseRepository<User> {
     ) {
         super(userModel);
     }
-    async createUser(email: string, password: string): Promise<User> {
+    async createUser(
+        email: string,
+        password: string,
+        name: string,
+        phone: string,
+        avatar: string,
+    ): Promise<User> {
         const user = new User();
         user.email = email;
         user.password = password;
-
+        user.name = name;
+        user.phone = phone;
+        user.avatar = avatar;
         // Log để kiểm tra
         // console.log('Creating user:', user);
 

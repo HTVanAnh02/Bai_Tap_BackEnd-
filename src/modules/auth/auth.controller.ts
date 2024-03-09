@@ -15,6 +15,7 @@ import { TrimBodyPipe } from '../../common/pipe/trim.body.pipe';
 import { SuccessResponse } from '../../common/helpers/response';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
+import { BcryptService } from './bcrypt.service';
 // import { date } from 'joi';
 
 @ApiTags('Auth APIs')
@@ -23,6 +24,7 @@ export class AuthController extends BaseController {
     constructor(
         private readonly authService: AuthService,
         private readonly jwtService: JwtService,
+        private readonly bcrypt: BcryptService,
     ) {
         super();
     }
@@ -34,7 +36,6 @@ export class AuthController extends BaseController {
         // console.log(dto)
         try {
             const result = await this.authService.Login(dto);
-
             if (result) return new SuccessResponse(result);
             throw new HttpException(
                 'Tài khoản mật khẩu không chính xác',
@@ -47,11 +48,8 @@ export class AuthController extends BaseController {
     @Post('register')
     async registerUser(@Body() dto: RegisterDto) {
         try {
-            console.log(dto);
-
             const user = await this.authService.registerUser(dto);
-            // const token = await this.authService.generateToken(user);
-            console.log(user);
+            // console.log(user);
 
             return new SuccessResponse({
                 message: 'Đăng ký thành công',

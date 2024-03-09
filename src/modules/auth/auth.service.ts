@@ -12,14 +12,14 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './auth.interface';
 import { jwtConstants } from '../../common/constants';
 import * as bcrypt from 'bcrypt';
-// import { log } from 'console';
-// import { AuthRepository } from './auth.repository';
+import { BcryptService } from './bcrypt.service';
 
 @Injectable()
 export class AuthService extends BaseService<User, AuthRepository> {
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
+        private readonly bcrypt: BcryptService,
     ) {
         super(authRepository);
     }
@@ -64,7 +64,7 @@ export class AuthService extends BaseService<User, AuthRepository> {
     }
     async registerUser(dto: RegisterDto): Promise<any> {
         try {
-            const { email, password } = dto;
+            const { email, password, name, phone, avatar } = dto;
 
             // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
             const emailExists = await this.authRepository.findOne({ email });
@@ -81,6 +81,9 @@ export class AuthService extends BaseService<User, AuthRepository> {
             const data = await this.authRepository.createUser(
                 email,
                 hashedPassword,
+                name,
+                phone,
+                avatar,
             );
 
             // console.log('Đăng ký thành công');
