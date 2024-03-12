@@ -36,7 +36,7 @@ export class AuthService extends BaseService<User, AuthRepository> {
                 { data },
                 {
                     secret: jwtConstants.secret,
-                    expiresIn: jwtConstants.refresh_expiresIn,
+                    expiresIn: jwtConstants.expiresIn,
                 },
             );
             return {
@@ -49,14 +49,14 @@ export class AuthService extends BaseService<User, AuthRepository> {
                     expiresIn: jwtConstants.refresh_expiresIn,
                 },
                 profile: {
+                    id: data.id,
                     email: data.email,
-                    _id: data.id,
                     role: data.role,
                     avatar: data.avatar,
                 },
             };
         } catch (error) {
-            this.logger.error('Error in autherService login: ' + error);
+            this.logger.error('Erro autherservice login' + error);
             throw error;
         }
     }
@@ -125,20 +125,6 @@ export class AuthService extends BaseService<User, AuthRepository> {
                 'Lỗi khi đăng ký người dùng',
                 HttpStatus.INTERNAL_SERVER_ERROR,
             );
-        }
-    }
-    async generateToken(data: any, secret: string, expiresIn: number) {
-        try {
-            const token = await this.jwtService.signAsync(
-                { data },
-                {
-                    secret: secret,
-                    expiresIn: expiresIn,
-                },
-            );
-            return token;
-        } catch (e) {
-            console.log('Error generateToken authService');
         }
     }
 
