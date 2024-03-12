@@ -12,14 +12,12 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './auth.interface';
 import { jwtConstants } from '../../common/constants';
 import * as bcrypt from 'bcrypt';
-import { BcryptService } from './bcrypt.service';
 
 @Injectable()
 export class AuthService extends BaseService<User, AuthRepository> {
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
-        private readonly bcrypt: BcryptService,
     ) {
         super(authRepository);
     }

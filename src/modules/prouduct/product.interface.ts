@@ -4,128 +4,80 @@ import { ProductOrderBy } from './product.contant';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import Joi from '../../plugins/joi';
 import { CommonDto, CommonListQuery } from '../../common/interfaces';
-import {
-    IsDate,
-    IsNotEmpty,
-    IsOptional,
-    IsString,
-    Matches,
-} from 'class-validator';
-const emojiRegex = /[\uD800-\uDFFF]/;
-const leadingTrailingSpaceRegex = /^\s|\s$/;
-const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
 export class CreateProductDto extends CommonDto {
-    @IsNotEmpty({ message: 'Name không được để trống' })
-    @IsString({ message: 'Name phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Name không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Name không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'Product name',
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Name không được chứa ký tự đặc biệt',
-    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     name: string;
 
-    @IsString({ message: 'Email phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Email không đúng định dạng' })
-    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
-    @Matches(emojiRegex, { message: 'Email không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Email không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: Number,
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Email không được chứa ký tự đặc biệt',
+    @JoiValidate(Joi.number().positive().required())
+    price: number;
+
+    @ApiProperty({
+        type: Number,
     })
-    email: string;
+    @JoiValidate(Joi.number().positive().required())
+    quantity: number;
 
-    @IsOptional()
-    @IsString({ message: 'Password phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Password không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Password không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'description',
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Password không được chứa ký tự đặc biệt',
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    description: string;
+
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'image',
     })
-    password?: string;
-
-    @IsNotEmpty({ message: 'birthday không được để trống' })
-    @IsString({ message: 'Phải là một chuỗi' })
-    @IsDate({ message: 'birthday phải có định dạng ngày tháng' })
-    birthday: string;
-
-    @IsNotEmpty({ message: 'Không được để trống' })
-    @IsString({ message: 'Phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Phone không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Phone không được có khoảng trắng ở đầu và cuối',
-    })
-    phone: string;
-
-    @IsString()
-    @IsOptional()
-    role?: string;
-
-    @IsNotEmpty({ message: 'Ảnh không được để trống' })
-    @IsString({ message: 'Ảnh phải là một chuỗi' })
-    imageUrl: string;
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).optional())
+    imageUrl?: string;
 }
 
 export class UpdateProductDto extends CommonDto {
-    @IsNotEmpty({ message: 'Name không được để trống' })
-    @IsString({ message: 'Name phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Name không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Name không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'Product name',
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Name không được chứa ký tự đặc biệt',
-    })
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
     name: string;
 
-    @IsString({ message: 'Email phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Email không đúng định dạng' })
-    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
-    @Matches(emojiRegex, { message: 'Email không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Email không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: Number,
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Email không được chứa ký tự đặc biệt',
+    @JoiValidate(Joi.number().positive().required())
+    price: number;
+
+    @ApiProperty({
+        type: Number,
     })
-    email: string;
+    @JoiValidate(Joi.number().positive().required())
+    quantity: number;
 
-    @IsOptional()
-    @IsString({ message: 'Password phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Password không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Password không được có khoảng trắng ở đầu và cuối',
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'description',
     })
-    @Matches(specialCharacterRegex, {
-        message: 'Password không được chứa ký tự đặc biệt',
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).required())
+    description: string;
+
+    @ApiProperty({
+        type: String,
+        maxLength: INPUT_TEXT_MAX_LENGTH,
+        default: 'image',
     })
-    password?: string;
-
-    @IsNotEmpty({ message: 'birthday không được để trống' })
-    @IsString({ message: 'Phải là một chuỗi' })
-    @IsDate({ message: 'birthday phải có định dạng ngày tháng' })
-    birthday: string;
-
-    @IsNotEmpty({ message: 'Không được để trống' })
-    @IsString({ message: 'Phải là một chuỗi' })
-    @Matches(emojiRegex, { message: 'Phone không được chứa emoji' })
-    @Matches(leadingTrailingSpaceRegex, {
-        message: 'Phone không được có khoảng trắng ở đầu và cuối',
-    })
-    phone: string;
-
-    @IsString()
-    @IsOptional()
-    role?: string;
-
-    @IsNotEmpty({ message: 'Ảnh không được để trống' })
-    @IsString({ message: 'Ảnh phải là một chuỗi' })
-    imageUrl: string;
+    @JoiValidate(Joi.string().trim().max(INPUT_TEXT_MAX_LENGTH).optional())
+    imageUrl?: string;
 }
 
 export class GetProductListQuery extends CommonListQuery {

@@ -1,7 +1,7 @@
 import Joi from '../plugins/joi';
 export const jwtConstants = {
     secret: 'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
-    expiresIn: 200,
+    expiresIn: 360,
     refresh_expiresIn: 720,
 };
 export const jwtConstantsRegister = {

@@ -15,7 +15,6 @@ import { TrimBodyPipe } from '../../common/pipe/trim.body.pipe';
 import { SuccessResponse } from '../../common/helpers/response';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
-import { BcryptService } from './bcrypt.service';
 // import { date } from 'joi';
 
 @ApiTags('Auth APIs')
@@ -24,7 +23,6 @@ export class AuthController extends BaseController {
     constructor(
         private readonly authService: AuthService,
         private readonly jwtService: JwtService,
-        private readonly bcrypt: BcryptService,
     ) {
         super();
     }
